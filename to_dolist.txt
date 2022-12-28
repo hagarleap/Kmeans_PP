@@ -12,6 +12,8 @@ Create github for project
 
 30.12:
 
+create an array of the keys so we can return key and not the index of vector (they may be different, for example vector with key 44 could be at index 2)
+
 continue translating the algorithm to code:
 	4. choose random row from pandas to be first centroid = a (exclude key!). Create array that keeps centroid keys, add a's key.
 	4.5 create eucledian distance function (?)

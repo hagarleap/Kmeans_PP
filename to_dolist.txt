@@ -16,10 +16,10 @@ create an array of the keys so we can return key and not the index of vector
  (they may be different, for example vector with key 44 could be at index 2) DONE
 
 continue translating the algorithm to code:
-	4. choose random row from pandas to be first centroid = a (exclude key!). 
+	4.  choose random row from pandas to be first centroid = a (exclude key!). 
 		Create array that keeps centroid keys, add a's key.
 	4.5 create eucledian distance function (?)
-	5. calculate eucledian distance for all vectors from a, in numpy array (list comprehension!).
+	5.  calculate eucledian distance for all vectors from a, in numpy array (list comprehension!).
 		No need for special attention to a, 
 		its distance will be zero therefore chance to pick it is zero. 
 		just make sure it is a true zero and not just a very very small probability. maybe go back

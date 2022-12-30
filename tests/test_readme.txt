@@ -3,3 +3,5 @@
 3. k=15, max_iter = 750, eps=0, input_3_db_1, input_3_db_2
 
 test line : python3 kmeans_pp.py 3 100 0.01 input_1_db_1.txt input_1_db_2.txt
+
+kmeans_pp(3,0.01, "input_1_db_1.txt", "input_1_db_2.txt",  100 )

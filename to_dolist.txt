@@ -28,8 +28,15 @@ continue translating the algorithm to code:
 	6.find out how to choose key at random but with probability we calculated (step 3 in algo)
 	7. repeat using a= new centroid. make sure to update keys of discovered centroids to be 0!
 
-maybe start on c:
-in c:
+start on C:
 	1. convert python centroid into cord node list
 	2. build dict using the output from 1
+	2.5 build vector linked list from python vector list
 	3. run as in HW 1 
+
+12.31
+1. convert python centroid into cord node list
+2. build dict using the output from 1
+2.5 build vector linked list from python vector list
+3. run as in HW 1 
+4.return from kmeans a flattened array, rebuild it in python

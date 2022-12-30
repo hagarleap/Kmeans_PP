@@ -15,10 +15,6 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     file_2.close()
     
     vectors_amt = df_1.shape[0]
-    df_1_columns_amt= df_1.shape[1]
-    df_2_columns_amt= df_1.shape[1]
-   
-
   
     ##check that the amount of clusters is legal##
     if(k>vectors_amt):
@@ -29,13 +25,12 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     ##merge and sort inputs##
     df_vectors = pd.merge(df_1, df_2, on=0)
     df_vectors = df_vectors.sort_values(by=0)
-     
-
     
     ##convert dataframe into numpy array, without keys!##
     keys = df_vectors[0].to_numpy()
     vectors = df_vectors.drop(0, axis=1).to_numpy()
-     
+    vector_len = np.size(vectors[0])
+    
     ##Start algorithm##
     
     ##step 1##
@@ -64,11 +59,11 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
         print(f"{round(centroid_keys[i], 0)}," , end="")
     print(f"{round(centroid_keys[-1],0)}") 
    
-    
-    #convert centroid to 2Darray
     #convert vectors to 2Darray
-    print(vectors.tolist())
-    print(centroids)
+    vectors = vectors.tolist()
+    
+    ###send to c####
+    new_centroids = 0  #insert call to c here kmeans.kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
 
        
    

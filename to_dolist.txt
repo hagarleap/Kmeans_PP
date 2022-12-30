@@ -7,19 +7,23 @@ Start translating the algorithm to code:
 	2. union the two files - DONE
 	3. sort by key field - DONE
 
-Create github for project
+Create github for project - DONE
 
 
 30.12:
 
-create an array of the keys so we can return key and not the index of vector (they may be different, for example vector with key 44 could be at index 2)
+create an array of the keys so we can return key and not the index of vector
+ (they may be different, for example vector with key 44 could be at index 2) DONE
 
 continue translating the algorithm to code:
-	4. choose random row from pandas to be first centroid = a (exclude key!). Create array that keeps centroid keys, add a's key.
+	4. choose random row from pandas to be first centroid = a (exclude key!). 
+		Create array that keeps centroid keys, add a's key.
 	4.5 create eucledian distance function (?)
-	5. calculate eucledian distance for all vectors from a, in numpy array (list comprehension!). No need for special attention to a, 
+	5. calculate eucledian distance for all vectors from a, in numpy array (list comprehension!).
+		No need for special attention to a, 
 		its distance will be zero therefore chance to pick it is zero. 
-		just make sure it is a true zero and not just a very very small probability. maybe go back and switch it to 0.
+		just make sure it is a true zero and not just a very very small probability. maybe go back
+		and switch it to 0.
 	5.5 divide whole np array by sum(distances)
 	6.find out how to choose key at random but with probability we calculated (step 3 in algo)
 	7. repeat using a= new centroid. make sure to update keys of discovered centroids to be 0!

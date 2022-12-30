@@ -31,18 +31,52 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     
     df_vectors = df_vectors.sort_values(by='key')
     print(df_vectors)
+    
     ##convert dataframe into numpy array, without keys!##
+    keys = df_vectors['key'].to_numpy()
+    print(keys)
     vectors = df_vectors.drop('key', axis=1).to_numpy()
     print(vectors)
      
     ##Start algorithm##
+    
     ##step 1##
     centroid_keys = []
+    centroids = [] ## python array of numpy arrays
+    np.random.seed(0)
+    curr_index = np.random.choice(keys.size())
+    centroid_keys.append(keys[curr_index])
+    centroids.append(vectors[curr_index])
+    keys = np.delete(keys, curr_index)
+    vectors = np.delete(vectors, curr_index)
+
+    for i in range(1,k):
+        ##step 2##
+        distances = np.array([euclidian_distance(vector, centroids[-1]) for vector in vectors])
+        
+        ##step 3
+        probabilities = np.divide(distances, distances.sum())
+        
+        ##step 2 but with prob function##
+        curr_index = np.random.choice(keys.size(), p=probabilities) ##check to see this is legal
+        centroid_keys.append(keys[curr_index])
+        centroids.append(vectors[curr_index])
+        keys = np.delete(keys, curr_index)
+        vectors = np.delete(vectors, curr_index)
+
+    print(centroid_keys)
+    print(centroids)
+
    
     
     
     return 0
 
+def euclidian_distance(vec1, vec2):
+    sum = 0
+    for i in range(vec1.size()):
+        sum += (vec1[i]-vec2[i])**2
+    return sum**(1/2)
 
 
 

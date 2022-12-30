@@ -15,28 +15,26 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     file_2.close()
     
     vectors_amt = df_1.shape[0]
-    print(vectors_amt)
+    df_1_columns_amt= df_1.shape[1]
+    df_2_columns_amt= df_1.shape[1]
+   
+
   
     ##check that the amount of clusters is legal##
     if(k>vectors_amt):
         print("Invalid number of clusters!")
         exit()
     
+    
     ##merge and sort inputs##
-    df_1.columns =['key', 'coordinate_0', 'coordinate_1']
-    df_2.columns =['key', 'coordinate_2', 'coordinate_3']
-    
-    df_vectors = pd.merge(df_1, df_2, on='key')
-    
-    
-    df_vectors = df_vectors.sort_values(by='key')
-    print(df_vectors)
+    df_vectors = pd.merge(df_1, df_2, on=0)
+    df_vectors = df_vectors.sort_values(by=0)
+     
+
     
     ##convert dataframe into numpy array, without keys!##
-    keys = df_vectors['key'].to_numpy()
-    print(keys)
-    vectors = df_vectors.drop('key', axis=1).to_numpy()
-    print(vectors)
+    keys = df_vectors[0].to_numpy()
+    vectors = df_vectors.drop(0, axis=1).to_numpy()
      
     ##Start algorithm##
     
@@ -44,42 +42,55 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     centroid_keys = []
     centroids = [] ## python array of numpy arrays
     np.random.seed(0)
-    curr_index = np.random.choice(keys.size())
+    curr_index = np.random.choice(np.size(keys))
     centroid_keys.append(keys[curr_index])
-    centroids.append(vectors[curr_index])
-    keys = np.delete(keys, curr_index)
-    vectors = np.delete(vectors, curr_index)
+    centroids.append(vectors[curr_index].tolist())
 
+    
     for i in range(1,k):
         ##step 2##
-        distances = np.array([euclidian_distance(vector, centroids[-1]) for vector in vectors])
+        distances = np.array([min_distance(vector, centroids) for vector in vectors])
         
         ##step 3
         probabilities = np.divide(distances, distances.sum())
         
         ##step 2 but with prob function##
-        curr_index = np.random.choice(keys.size(), p=probabilities) ##check to see this is legal
+        curr_index = np.random.choice(np.size(keys), p=probabilities) ##check to see this is legal
         centroid_keys.append(keys[curr_index])
-        centroids.append(vectors[curr_index])
-        keys = np.delete(keys, curr_index)
-        vectors = np.delete(vectors, curr_index)
-
-    print(centroid_keys)
-    print(centroids)
-
+        centroids.append(vectors[curr_index].tolist())
+        
+    
+    for i in range(len(centroid_keys)-1):
+        print(f"{round(centroid_keys[i], 0)}," , end="")
+    print(f"{round(centroid_keys[-1],0)}") 
    
     
-    
+    #convert centroid to 2Darray
+    #convert vectors to 2Darray
+    print(vectors.tolist())
+    print(centroids)
+
+       
+   
     return 0
 
 def euclidian_distance(vec1, vec2):
     sum = 0
-    for i in range(vec1.size()):
+    for i in range(np.size(vec1)):
         sum += (vec1[i]-vec2[i])**2
     return sum**(1/2)
 
-
-
+def min_distance(vector, centroids):
+    min_dis = float('inf')
+    for centroid in centroids:
+        curr_distance=euclidian_distance(vector,centroid)
+        if(curr_distance<min_dis):
+           min_dis=curr_distance
+    return  min_dis    
+           
+           
+           
+            
 argv = sys.argv[1:]
 if len(argv)==4:
     try:

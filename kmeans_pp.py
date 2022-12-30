@@ -28,7 +28,6 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     
     ##merge and sort inputs##
     df_vectors = pd.merge(df_1, df_2, on=0)
-    
     df_vectors = df_vectors.sort_values(by=0)
      
 
@@ -45,7 +44,7 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     np.random.seed(0)
     curr_index = np.random.choice(np.size(keys))
     centroid_keys.append(keys[curr_index])
-    centroids.append(vectors[curr_index])
+    centroids.append(vectors[curr_index].tolist())
 
     
     for i in range(1,k):
@@ -58,10 +57,20 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
         ##step 2 but with prob function##
         curr_index = np.random.choice(np.size(keys), p=probabilities) ##check to see this is legal
         centroid_keys.append(keys[curr_index])
-        centroids.append(vectors[curr_index])
+        centroids.append(vectors[curr_index].tolist())
         
-    print(centroid_keys)
+    
+    for i in range(len(centroid_keys)-1):
+        print(f"{round(centroid_keys[i], 0)}," , end="")
+    print(f"{round(centroid_keys[-1],0)}") 
+   
+    
+    #convert centroid to 2Darray
+    #convert vectors to 2Darray
+    print(vectors.tolist())
+    print(centroids)
 
+       
    
     return 0
 

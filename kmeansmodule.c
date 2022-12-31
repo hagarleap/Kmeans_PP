@@ -63,6 +63,7 @@ struct cord_node* init_deltas(int K){
       int i;
       head_deltas_node = malloc(sizeof(struct cord_node));
       if(head_deltas_node==NULL){return NULL;}
+      prev_deltas_node = NULL;
 
       curr_deltas_node = head_deltas_node;
       curr_deltas_node->next = NULL;
@@ -88,7 +89,7 @@ struct cord_node* ZERO_vector(int vector_len){
       if(head_zcord_node==NULL){return NULL;}
       curr_zcord_node = head_zcord_node;
       curr_zcord_node->next = NULL;
-
+      prev_zcord_node = NULL;
 
       for(l=0; l<vector_len; l++)
       {
@@ -108,7 +109,7 @@ struct cord_node* ZERO_vector(int vector_len){
 delta difference between the new and old centroid. Finally it replaces the centroid field with the sum field,
 and replaces the sum field with zeros. It also resets the avg_divisor field, and returns an integer 1 or 0.
 0 means that all of the values in delta are lesser than epsilon. Otherwise, at least one is larger.*/
-int update_centroid(struct dict_node *head_dict_centroid, struct cord_node *deltas,  int vector_len){
+int update_centroid(struct dict_node *head_dict_centroid, struct cord_node *deltas,  int vector_len, double eps){
     int i =0;
     int max_delta_bigger_than_epsilon=0;
     struct cord_node *curr_sum_node;
@@ -219,14 +220,13 @@ void delete_dict_list(struct dict_node *head_dict_centroid){
     }
 }
 
-
-PyObject* kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
+PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, PyObject *vectors, PyObject *centroids)
 {
     int b, i,max_delta_bigger_than_epsilon=1, iter_count = 0, centroid_len_count=0,vectors_len_count=0,index=0;
     double  argmin, dist;
 
     PyObject* python_val;
-    PyObject* python_double;
+    //PyFloatObject* python_float;
     
     struct vector_node *vectors_list, *head_vec, *curr_vec, *prev_vec;
     struct cord_node *result_cord, *head_cord, *curr_cord, *head_cord2, *curr_cord2, *deltas, *delta_head_for_UC;
@@ -264,6 +264,8 @@ PyObject* kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
     curr_cord2 = head_cord2;
     curr_cord2->next = NULL;
 
+    prev_dict_centroid = NULL;
+    prev_vec = NULL;
 
 
     //creating vectors list as linked list
@@ -332,7 +334,7 @@ PyObject* kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
         curr_cord2 = curr_cord2->next;
         curr_cord2->next = NULL;
         curr_cord2->value = 0.0;
-        centroid_amt_count++;
+        centroid_len_count++;
 
     }
 
@@ -377,7 +379,7 @@ PyObject* kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
         iter_count+=1;
         centroid_head_for_UC =head_dict_centroid;
         delta_head_for_UC = deltas;
-        max_delta_bigger_than_epsilon = update_centroid(centroid_head_for_UC, delta_head_for_UC, vector_len);
+        max_delta_bigger_than_epsilon = update_centroid(centroid_head_for_UC, delta_head_for_UC, vector_len, eps);
         vectors_list= head_vec;
      } 
 
@@ -388,8 +390,7 @@ PyObject* kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
     while(result!=NULL){
         result_cord = result->centroid;
         for(b=0; b<vector_len; b++){
-            python_double = Py_BuildValue('d',(result_cord->value))
-            PyList_SetItem(python_val, index,python_double);
+            PyList_SetItem(python_val, index, PyFloat_FromDouble(result_cord->value));
             result_cord = result_cord->next;
             index++;
         } 
@@ -415,7 +416,7 @@ PyObject* kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
 
 int counter = 0;
 // wrapper function for kmeans
-static PyObject *cKmeans(PyObject *self, PyObject *args) {
+static PyObject* cKmeans(PyObject *self, PyObject *args) {
     //kmeans.kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
     int K, iter, vector_len, vectors_amt;
     double eps;
@@ -424,21 +425,17 @@ static PyObject *cKmeans(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "iiiidOO", &K, &iter, &vector_len, &eps, &vectors_amt, &vectors, &centroids)) {
         return NULL;
     }
-    if(!(PyList_Check(vectors)) || !(PyList_Check(centeroids)))
-        return NULL;
+    /*if(!(PyList_Check(vectors)) || !(PyList_Check(centeroids)))
+        return NULL;*/
 
-
-    double* centroid_res; 
-    centroid_res = kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids);
-
-    return Py_BuildValue("O", centroid_res);
+    return kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids);
 }
 
 
 // module's function table
 static PyMethodDef kmeansMethods[] = {
-    {"kmeans",                   /* the Python method name that will be used */
-      (PyCFunction) kmeans, /* the C-function that implements the Python function and returns static PyObject*  */
+    {"cKmeans",                   /* the Python method name that will be used */
+      (PyCFunction) cKmeans, /* the C-function that implements the Python function and returns static PyObject*  */
       METH_VARARGS,           /* flags indicating parameters accepted for this function */
       PyDoc_STR("returns centroids according to the k-means clustering algorithm")}, /*  The docstring for the function */
     {NULL, NULL, 0, NULL} 
@@ -447,12 +444,17 @@ static PyMethodDef kmeansMethods[] = {
 // modules definition
 static struct PyModuleDef kmeans_Module = {
     PyModuleDef_HEAD_INIT,
-    "kmeansmodule",     // name of module exposed to Python
+    "kmeans_capi",     // name of module exposed to Python
     "Python wrapper for kmeans C extension library.", // module documentation
     -1,
     kmeansMethods
 };
 
-PyMODINIT_FUNC PyInit_kmeans(void) {
-    return PyModule_Create(&kmeans_Module);
+PyMODINIT_FUNC PyInit_kmeans_capi(void) {
+    PyObject *m;
+    m = PyModule_Create(&kmeans_Module);
+    if (!m) {
+        return NULL;
+    }
+    return m;
 }

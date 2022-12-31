@@ -40,3 +40,5 @@ start on C:
 2.5 build vector linked list from python vector list
 3. run as in HW 1 
 4.return from kmeans a flattened array, rebuild it in python
+
+send rami and email if its okay to use py objects within the kmeans main func

@@ -3,6 +3,7 @@ import sys
 import pandas as pd
 import numpy as np
 import math
+import kmeans_capi
 
 def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     file_1 = open(input_1, 'r')
@@ -63,7 +64,7 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     vectors = vectors.tolist()
     
     ###send to c####
-    new_centroids = 0  #insert call to c here kmeans.kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
+    new_centroids = kmeans_capi.cKmeans(k, iter, vector_len, vectors_amt, eps, vectors, centroids)
 
        
    

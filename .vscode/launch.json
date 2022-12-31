@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "args": [
+             "args": [
                 "3",
                 "100",
                 "0.01",
@@ -19,7 +19,7 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "cwd": "${workspaceFolder}"
-        },
+        }, 
         {
             "name": "C Launch",
             "type": "cppdbg",
@@ -50,5 +50,23 @@
             ],
             "preLaunchTask": "compile C"
         }
+        /*, 
+        {
+            "name": "(gdb) Attach",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "/usr/local/bin/python3", 
+            "processId": "${command:pickProcess}",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        
+        }
+        */
     ]
 }

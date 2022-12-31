@@ -63,10 +63,11 @@ struct cord_node* init_deltas(int K){
       int i;
       head_deltas_node = malloc(sizeof(struct cord_node));
       if(head_deltas_node==NULL){return NULL;}
-      prev_deltas_node = NULL;
-
+      
       curr_deltas_node = head_deltas_node;
       curr_deltas_node->next = NULL;
+
+      prev_deltas_node = curr_deltas_node;
       for(i=0; i<K; i++)
       {
          curr_deltas_node->value = 1;
@@ -89,7 +90,8 @@ struct cord_node* ZERO_vector(int vector_len){
       if(head_zcord_node==NULL){return NULL;}
       curr_zcord_node = head_zcord_node;
       curr_zcord_node->next = NULL;
-      prev_zcord_node = NULL;
+
+      prev_zcord_node = curr_zcord_node;
 
       for(l=0; l<vector_len; l++)
       {
@@ -264,8 +266,8 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
     curr_cord2 = head_cord2;
     curr_cord2->next = NULL;
 
-    prev_dict_centroid = NULL;
-    prev_vec = NULL;
+    prev_dict_centroid = curr_dict_centroid;
+    prev_vec = curr_vec;
 
 
     //creating vectors list as linked list
@@ -429,6 +431,7 @@ static PyObject* cKmeans(PyObject *self, PyObject *args) {
         return NULL;*/
 
     return kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids);
+    // return Py_BuildValue("O",kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids))
 }
 
 

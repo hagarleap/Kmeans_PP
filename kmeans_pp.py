@@ -66,9 +66,18 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     ###send to c####
     new_centroids = kmeans_capi.cKmeans(k, iter, vector_len, vectors_amt, eps, vectors, centroids)
 
-       
+    if(new_centroids == None):
+        print("An Error Has Occurred")
+        exit()
    
-    return 0
+    #print the centroids
+    for i in range(len(new_centroids)-1):
+        if(i%(vector_len)==vector_len-1):
+            print(f"{round(new_centroids[i], 4)}")
+        else:    
+            print(f"{round(new_centroids[i], 4)}," , end="")
+     
+   
 
 def euclidian_distance(vec1, vec2):
     sum = 0

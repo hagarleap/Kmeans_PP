@@ -3,7 +3,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-#define EPSILON  0.001
+
 
 /*Data structures*/
 struct cord_node
@@ -62,10 +62,7 @@ struct cord_node* init_deltas(int K){
       struct cord_node *head_deltas_node, *curr_deltas_node, *prev_deltas_node;
       int i;
       head_deltas_node = malloc(sizeof(struct cord_node));
-      if(head_deltas_node==NULL){
-        printf("An Error Has Occurred");
-        exit(1);
-      }
+      if(head_deltas_node==NULL){return NULL;}
 
       curr_deltas_node = head_deltas_node;
       curr_deltas_node->next = NULL;
@@ -73,10 +70,7 @@ struct cord_node* init_deltas(int K){
       {
          curr_deltas_node->value = 1;
          curr_deltas_node->next = malloc(sizeof(struct cord_node));
-         if((curr_deltas_node->next)==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
+         if((curr_deltas_node->next)==NULL){return NULL;}
          prev_deltas_node = curr_deltas_node;
          curr_deltas_node = curr_deltas_node->next; 
       }
@@ -91,10 +85,7 @@ struct cord_node* ZERO_vector(int vector_len){
       int l;
 
       head_zcord_node = malloc(sizeof(struct cord_node));
-      if(head_zcord_node==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
+      if(head_zcord_node==NULL){return NULL;}
       curr_zcord_node = head_zcord_node;
       curr_zcord_node->next = NULL;
 
@@ -103,10 +94,7 @@ struct cord_node* ZERO_vector(int vector_len){
       {
          curr_zcord_node->value = 0;
          curr_zcord_node->next = malloc(sizeof(struct cord_node));
-         if((curr_zcord_node->next)==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
+         if((curr_zcord_node->next)==NULL){return NULL;}
          prev_zcord_node = curr_zcord_node;
          curr_zcord_node = curr_zcord_node->next; 
       }
@@ -136,7 +124,7 @@ int update_centroid(struct dict_node *head_dict_centroid, struct cord_node *delt
         }
         head_dict_centroid->avg_divisor=0;
         deltas->value = euclidian_distance(head_dict_centroid->centroid, head_dict_centroid->sum ,vector_len);
-        if((deltas->value) > EPSILON){
+        if((deltas->value) > eps){
             /*as long as ONE delta is bigger than epsilon, we want the while loop to keep going */
             max_delta_bigger_than_epsilon=1;
         }
@@ -231,13 +219,15 @@ void delete_dict_list(struct dict_node *head_dict_centroid){
     }
 }
 
-//int kmeans(int argc, char *argv[]) 
-int kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
-{
-    int b,  flag=0, i=1, max_delta_bigger_than_epsilon=1, iter_count = 0; //K, iter, vector_len=1, N = 0,
-    double n, argmin, dist;
-    char c;
 
+PyObject* kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
+{
+    int b, i,max_delta_bigger_than_epsilon=1, iter_count = 0, centroid_len_count=0,vectors_len_count=0,index=0;
+    double  argmin, dist;
+
+    PyObject* python_val;
+    PyObject* python_double;
+    
     struct vector_node *vectors_list, *head_vec, *curr_vec, *prev_vec;
     struct cord_node *result_cord, *head_cord, *curr_cord, *head_cord2, *curr_cord2, *deltas, *delta_head_for_UC;
     struct dict_node *centroid_list_dict, *centroid_head_for_UC, *result, *head_dict_centroid;
@@ -247,134 +237,114 @@ int kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
      that holds the centroids */
     head_dict_centroid = malloc(sizeof(struct dict_node));
     if(head_dict_centroid==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
+            return NULL;
          }
     curr_dict_centroid = head_dict_centroid;
     curr_dict_centroid->next = NULL;
 
     head_cord = malloc(sizeof(struct cord_node));
     if(head_cord==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
+            return NULL;
+
          }
     curr_cord = head_cord;
     curr_cord->next = NULL;
 
     head_vec = malloc(sizeof(struct vector_node));
     if(head_vec==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
+           return NULL;
          }
     curr_vec = head_vec;
     curr_vec->next = NULL;
 
     head_cord2 = malloc(sizeof(struct cord_node));
     if(head_cord2==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
+           return NULL;
          }
     curr_cord2 = head_cord2;
     curr_cord2->next = NULL;
 
-    while (scanf("%lf%c", &n, &c) == 2)
-    {        
-        if (c == '\n')
-        {
-            N++;
-            flag=1;
-            curr_cord->value = n;
-            curr_vec->cords = head_cord;
-            curr_vec->next = malloc(sizeof(struct vector_node));
-            if((curr_vec->next)==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
-            prev_vec = curr_vec;
-            curr_vec = curr_vec->next;
-            curr_vec->next = NULL;
 
-            head_cord = malloc(sizeof(struct cord_node));
-            if(head_cord==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
-            curr_cord = head_cord;
-            curr_cord->next = NULL;
 
-            /*building the dict*/
-            if(i<=K){
-                i++;
-                curr_cord2->value = n;
-                curr_dict_centroid->centroid =head_cord2;
-                curr_dict_centroid->sum = ZERO_vector(vector_len); 
-                curr_dict_centroid->avg_divisor =0;
-                curr_dict_centroid->next = malloc(sizeof(struct dict_node));
-                if((curr_dict_centroid->next)==NULL){
-                     printf("An Error Has Occurred");
-                     exit(1);
-                }
-                prev_dict_centroid = curr_dict_centroid;
-                curr_dict_centroid = curr_dict_centroid->next;
-      
-                head_cord2 = malloc(sizeof(struct cord_node));
-                if(head_cord2==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
-                curr_cord2 = head_cord2;
-                curr_cord2->next = NULL;   
+    //creating vectors list as linked list
+    for (i=0;i<(vectors_amt*vector_len);i++)
+        {        
+            if (vectors_len_count == vector_len)
+            {
+                curr_cord->value =PyFloat_AsDouble(PyList_GetItem(vectors,i));
+                curr_vec->cords = head_cord;
+                curr_vec->next = malloc(sizeof(struct vector_node));
+                if((curr_vec->next)==NULL){ return NULL;}
+                prev_vec = curr_vec;
+                curr_vec = curr_vec->next;
+                curr_vec->next = NULL;
+
+                head_cord = malloc(sizeof(struct cord_node));
+                if(head_cord==NULL){return NULL;}
+                curr_cord = head_cord;
+                curr_cord->next = NULL;
+                vectors_len_count=0;
+                continue;
+                
             }
 
+            curr_cord->value = PyFloat_AsDouble(PyList_GetItem(vectors,i));
+            curr_cord->next = malloc(sizeof(struct cord_node));
+            if((curr_cord->next)==NULL){
+                return NULL;;
+            }
+            curr_cord = curr_cord->next;
+            curr_cord->next = NULL;
+            curr_cord->value = 0.0;
+            vectors_len_count++;
+
+        }
+
+
+    //creating dict struct 
+    for (i=0;i<(K*vector_len);i++)
+        {        
+            if (centroid_len_count == vector_len)
+            {
+
+            curr_cord2->value = PyFloat_AsDouble(PyList_GetItem(centroids,i));
+            curr_dict_centroid->centroid =head_cord2;
+            curr_dict_centroid->sum = ZERO_vector(vector_len); 
+            curr_dict_centroid->avg_divisor =0;
+            curr_dict_centroid->next = malloc(sizeof(struct dict_node));
+            if((curr_dict_centroid->next)==NULL){return NULL;}
+            prev_dict_centroid = curr_dict_centroid;
+            curr_dict_centroid = curr_dict_centroid->next;
+      
+            head_cord2 = malloc(sizeof(struct cord_node));
+            if(head_cord2==NULL){return NULL;}
+            curr_cord2 = head_cord2;
+            curr_cord2->next = NULL;   
+            
+            centroid_len_count=0;
             continue;
+            
         }
 
-        curr_cord->value = n;
-        curr_cord->next = malloc(sizeof(struct cord_node));
-        if((curr_cord->next)==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
-        curr_cord = curr_cord->next;
-        curr_cord->next = NULL;
-        curr_cord->value = 0.0;
-
-        if(i<=K){
-            curr_cord2->value = n;
-            curr_cord2->next = malloc(sizeof(struct cord_node));
-            if((curr_cord2->next)==NULL){
-            printf("An Error Has Occurred");
-            exit(1);
-         }
-            curr_cord2 = curr_cord2->next;
-            curr_cord2->next = NULL;
-            curr_cord2->value = 0.0;
-        }
-
-        if (flag ==0){
-            vector_len++;
-        }
+        curr_cord2->value =PyFloat_AsDouble(PyList_GetItem(centroids,i));
+        curr_cord2->next = malloc(sizeof(struct cord_node));
+        if((curr_cord2->next)==NULL){return NULL;}
+        curr_cord2 = curr_cord2->next;
+        curr_cord2->next = NULL;
+        curr_cord2->value = 0.0;
+        centroid_amt_count++;
 
     }
+
+
     free(curr_cord);
     free(curr_cord2);
     delete_vector_list(curr_vec);
     delete_dict_list(curr_dict_centroid);  
 
-    
     prev_vec->next = NULL;
     prev_dict_centroid->next = NULL;   
     
-    if (K>=N){
-        printf ("Invalid number of clusters!");
-        if(head_vec!=NULL){
-            delete_vector_list(head_vec);
-        }
-        if(head_dict_centroid!=NULL){
-            delete_dict_list(head_dict_centroid);
-        }
-        exit (1);
-    }
 
     /*new head- for the lists of vector */
     vectors_list = head_vec;
@@ -412,21 +382,21 @@ int kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
      } 
 
     /*Get the copy of the head of the dict for final print */
-    result = head_dict_centroid; 
+    result = head_dict_centroid;
+    
+    python_val = PyList_New(K*vector_len); 
     while(result!=NULL){
-
         result_cord = result->centroid;
-
-        for(b=0; b<vector_len-1; b++){
-            /*Print all but last vector cord with comma at end */
-            printf("%.4f,", result_cord->value); 
+        for(b=0; b<vector_len; b++){
+            python_double = Py_BuildValue('d',(result_cord->value))
+            PyList_SetItem(python_val, index,python_double);
             result_cord = result_cord->next;
-        }
-
-        /*Last vector cord printed without comma, with "enter" */
-        printf("%.4f\n", result_cord->value); 
-        result = result->next;  
+            index++;
+        } 
+        result = result->next;   
     }
+
+
 
     /*Free the following: head_vec, deltas, head_dict_centroid*/
     if(head_vec!=NULL){
@@ -437,7 +407,7 @@ int kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
     }
     delete_cord_node(deltas);
 
-    exit(0);
+    return python_val;
 }
 
 

@@ -343,8 +343,8 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
 
     free(curr_cord);
     free(curr_cord2);
-    delete_vector_list(curr_vec);
-    delete_dict_list(curr_dict_centroid);  
+    // delete_vector_list(curr_vec);
+    // delete_dict_list(curr_dict_centroid);  
 
     prev_vec->next = NULL;
     prev_dict_centroid->next = NULL;   
@@ -401,14 +401,14 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
 
 
 
-    /*Free the following: head_vec, deltas, head_dict_centroid*/
-    if(head_vec!=NULL){
-        delete_vector_list(head_vec);
-    }
-    if(head_dict_centroid!=NULL){
-        delete_dict_list(head_dict_centroid);
-    }
-    delete_cord_node(deltas);
+    // /*Free the following: head_vec, deltas, head_dict_centroid*/
+    // if(head_vec!=NULL){
+    //     delete_vector_list(head_vec);
+    // }
+    // if(head_dict_centroid!=NULL){
+    //     delete_dict_list(head_dict_centroid);
+    // }
+    // delete_cord_node(deltas);
 
     return python_val;
 }
@@ -424,7 +424,7 @@ static PyObject* cKmeans(PyObject *self, PyObject *args) {
     double eps;
     PyObject *vectors, *centroids;
 
-    if (!PyArg_ParseTuple(args, "iiiidOO", &K, &iter, &vector_len, &eps, &vectors_amt, &vectors, &centroids)) {
+    if (!PyArg_ParseTuple(args, "iiiidOO", &K, &iter, &vector_len, &vectors_amt, &eps, &vectors, &centroids)) {
         return NULL;
     }
     /*if(!(PyList_Check(vectors)) || !(PyList_Check(centeroids)))

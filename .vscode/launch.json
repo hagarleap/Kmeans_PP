@@ -16,46 +16,13 @@
                 "input_1_db_1.txt",
                 "input_1_db_2.txt"
             ],
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "cwd": "${workspaceFolder}"
+            "console": "integratedTerminal"
         }, 
-        {
-            "name": "C Launch",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/c/${fileBasenameNoExtension}",
-            "args": [
-                "3",
-                "100",
-                "<",
-                "test_1.txt"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "Set Disassembly Flavor to Intel",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "compile C"
-        }
-        /*, 
         {
             "name": "(gdb) Attach",
             "type": "cppdbg",
             "request": "attach",
-            "program": "/usr/local/bin/python3", 
+            "program": "/usr/local/lib/python3.7.1/bin/python3.7", 
             "processId": "${command:pickProcess}",
             "MIMode": "gdb",
             "setupCommands": [
@@ -67,6 +34,6 @@
             ]
         
         }
-        */
+        
     ]
 }

@@ -61,8 +61,15 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     print(f"{round(centroid_keys[-1],0)}") 
    
     #convert vectors to 2Darray
+    vectors = vectors.flatten()
     vectors = vectors.tolist()
+    centroids = np.array(centroids)
+    centroids = centroids.flatten()
+    centroids = centroids.tolist()
     
+    import os
+    pid = os.getpid()
+    print(pid)
     ###send to c####
     new_centroids = kmeans_capi.cKmeans(k, iter, vector_len, vectors_amt, eps, vectors, centroids)
 

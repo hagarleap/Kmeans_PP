@@ -273,7 +273,7 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
     //creating vectors list as linked list
     for (i=0;i<(vectors_amt*vector_len);i++)
         {        
-            if (vectors_len_count == vector_len)
+            if (vectors_len_count == vector_len-1)
             {
                 curr_cord->value =PyFloat_AsDouble(PyList_GetItem(vectors,i));
                 curr_vec->cords = head_cord;
@@ -308,7 +308,7 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
     //creating dict struct 
     for (i=0;i<(K*vector_len);i++)
         {        
-            if (centroid_len_count == vector_len)
+            if (centroid_len_count == vector_len-1)
             {
 
             curr_cord2->value = PyFloat_AsDouble(PyList_GetItem(centroids,i));

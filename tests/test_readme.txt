@@ -13,3 +13,6 @@ python3 kmeans_pp.py 7 0 input_2_db_1.txt input_2_db_2.txt
 
 python3 kmeans_pp.py 15 750 0 input_3_db_1.txt input_3_db_2.txt
 >>>>>>> d4dc97259066aaa9a832fd31f12901ae0f249892
+
+
+python3 setup.py build_ext --inplace

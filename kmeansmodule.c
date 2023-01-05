@@ -273,7 +273,7 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
     //creating vectors list as linked list
     for (i=0;i<(vectors_amt*vector_len);i++)
         {        
-            if (vectors_len_count == vector_len-1)
+            if (vectors_len_count == (vector_len-1))
             {
                 curr_cord->value =PyFloat_AsDouble(PyList_GetItem(vectors,i));
                 curr_vec->cords = head_cord;
@@ -308,7 +308,7 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
     //creating dict struct 
     for (i=0;i<(K*vector_len);i++)
         {        
-            if (centroid_len_count == vector_len-1)
+            if (centroid_len_count == (vector_len-1))
             {
 
             curr_cord2->value = PyFloat_AsDouble(PyList_GetItem(centroids,i));
@@ -401,14 +401,14 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
 
 
 
-    // /*Free the following: head_vec, deltas, head_dict_centroid*/
-    // if(head_vec!=NULL){
-    //     delete_vector_list(head_vec);
-    // }
-    // if(head_dict_centroid!=NULL){
-    //     delete_dict_list(head_dict_centroid);
-    // }
-    // delete_cord_node(deltas);
+    /*Free the following: head_vec, deltas, head_dict_centroid*/
+    if(head_vec!=NULL){
+        delete_vector_list(head_vec);
+    }
+    if(head_dict_centroid!=NULL){
+        delete_dict_list(head_dict_centroid);
+    }
+    delete_cord_node(deltas);
 
     return python_val;
 }

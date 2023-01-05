@@ -57,8 +57,8 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
         
     
     for i in range(len(centroid_keys)-1):
-        print(f"{round(centroid_keys[i], 0)}," , end="")
-    print(f"{round(centroid_keys[-1],0)}") 
+        print(f"{int(centroid_keys[i])}," , end="")
+    print(f"{int(centroid_keys[-1])}") 
    
     #convert vectors to 2Darray
     vectors = vectors.flatten()
@@ -67,6 +67,7 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     centroids = centroids.flatten()
     centroids = centroids.tolist()
     
+    # need to delete this
     import os
     pid = os.getpid()
     print(pid)
@@ -77,8 +78,9 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
         print("An Error Has Occurred")
         exit()
    
+
     #print the centroids
-    for i in range(len(new_centroids)-1):
+    for i in range(len(new_centroids)):
         if(i%(vector_len)==vector_len-1):
             print(f"{round(new_centroids[i], 4)}")
         else:    

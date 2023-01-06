@@ -68,9 +68,9 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
     centroids = centroids.tolist()
     
     # need to delete this
-    import os
-    pid = os.getpid()
-    print(pid)
+    # import os
+    # pid = os.getpid()
+    # print(pid)
     ###send to c####
     new_centroids = kmeans_capi.cKmeans(k, iter, vector_len, vectors_amt, eps, vectors, centroids)
 

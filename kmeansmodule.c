@@ -343,8 +343,8 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
 
     free(curr_cord);
     free(curr_cord2);
-    // delete_vector_list(curr_vec);
-    // delete_dict_list(curr_dict_centroid);  
+    delete_vector_list(curr_vec);
+    delete_dict_list(curr_dict_centroid);  
 
     prev_vec->next = NULL;
     prev_dict_centroid->next = NULL;   
@@ -419,7 +419,6 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
 int counter = 0;
 // wrapper function for kmeans
 static PyObject* cKmeans(PyObject *self, PyObject *args) {
-    //kmeans.kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids)
     int K, iter, vector_len, vectors_amt;
     double eps;
     PyObject *vectors, *centroids;
@@ -431,7 +430,6 @@ static PyObject* cKmeans(PyObject *self, PyObject *args) {
         return NULL;*/
 
     return kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids);
-    // return Py_BuildValue("O",kmeans(K, iter, vector_len, vectors_amt, eps, vectors, centroids))
 }
 
 
@@ -440,7 +438,7 @@ static PyMethodDef kmeansMethods[] = {
     {"cKmeans",                   /* the Python method name that will be used */
       (PyCFunction) cKmeans, /* the C-function that implements the Python function and returns static PyObject*  */
       METH_VARARGS,           /* flags indicating parameters accepted for this function */
-      PyDoc_STR("returns centroids according to the k-means clustering algorithm")}, /*  The docstring for the function */
+      PyDoc_STR("Returns centroids using a modified version of the k-means clustering program we created in HW 1, which uses new arguments: K, iter, vector_len, vectors_amt, eps, vectors, centroids.")}, /*  The docstring for the function */
     {NULL, NULL, 0, NULL} 
 };
 

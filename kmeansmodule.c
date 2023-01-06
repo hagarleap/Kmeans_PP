@@ -282,6 +282,7 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
                 prev_vec = curr_vec;
                 curr_vec = curr_vec->next;
                 curr_vec->next = NULL;
+                curr_vec->cords = NULL;
 
                 head_cord = malloc(sizeof(struct cord_node));
                 if(head_cord==NULL){return NULL;}
@@ -319,6 +320,10 @@ PyObject* kmeans(int K, int iter, int vector_len, int vectors_amt, double eps, P
             if((curr_dict_centroid->next)==NULL){return NULL;}
             prev_dict_centroid = curr_dict_centroid;
             curr_dict_centroid = curr_dict_centroid->next;
+            curr_dict_centroid->next = NULL;
+            curr_dict_centroid->centroid = NULL;
+            curr_dict_centroid->sum = NULL;
+
       
             head_cord2 = malloc(sizeof(struct cord_node));
             if(head_cord2==NULL){return NULL;}

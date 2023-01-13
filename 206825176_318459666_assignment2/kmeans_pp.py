@@ -77,10 +77,11 @@ def kmeans_pp(k, eps,  input_1,  input_2, iter=300):
 
     #print the centroids
     for i in range(len(new_centroids)):
+        x = "%.4f" % round(new_centroids[i], 4)
         if(i%(vector_len)==vector_len-1):
-            print(f"{round(new_centroids[i], 4)}")
+            print(f"{x}")
         else:    
-            print(f"{round(new_centroids[i], 4)}," , end="")
+            print(f"{x}," , end="")
      
    
 
